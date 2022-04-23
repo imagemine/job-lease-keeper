@@ -22,6 +22,8 @@ The following environment variables can be configured:
 |JOB_SUCCESS_THRESHOLD_MINUTES|minimum number of minutes to wait before cleaning a job that finished successfully |
 |JOB_FAILURE_THRESHOLD_MINUTES|minimum number of minutes to wait before cleaning a job that failed |
 |CHECK_FREQUENCY_MINUTES |frequency at which the check should be performed |
+|CLEANUP_JOBS|whether to clean up jobs. default true|
+|CLEANUP_PODS|whether to clean up completed pods. default false|
 
 
 ### Cleaning Multiple Namespaces 
@@ -35,4 +37,11 @@ There are few sample jobs available for testing this
 kubectl apply -f sample/job1.yaml -n default
 #fails
 kubectl apply -f sample/job3.yaml -n default
+```
+### Skipping Cleanup
+Annotation can be provided to skip cleanup for workloads.
+
+```yaml
+    annotations:
+      lease-keeper.io/skip: "true"
 ```

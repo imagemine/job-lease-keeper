@@ -34,6 +34,10 @@ spec:
            value: "20"
          - name: CHECK_FREQUENCY_MINUTES
            value: "5"
+         - name: CLEANUP_PODS
+           value: "true"
+         - name: CLEANUP_JOBS
+           value: "true"
          - name: KUBERNETES_SERVICE_HOST
            value: "kubernetes.default.svc"
          - name: KUBERNETES_SERVICE_PORT

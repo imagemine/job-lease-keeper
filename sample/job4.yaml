@@ -1,17 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: busybox-2-skip-job
+  name: busybox-4
 spec:
   backoffLimit: 0
   template:
     metadata:
-      name: busybox-2
+      name: busybox-4
       labels:
-        app: busybox-2
+        app: busybox-4
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        lease-keeper.io/skip: "true"
     spec:
       containers:
         - name: busybox
@@ -19,7 +18,7 @@ spec:
           command:
             - "/bin/sh"
             - "-c"
-            - "sleep 1"
+            - "sleep 1h"
           resources:
             requests:
               cpu: 10m
