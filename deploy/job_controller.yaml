@@ -15,7 +15,7 @@ spec:
       serviceAccountName: job-lease-keeper
       containers:
        - name: job-lease-keeper
-         image: cloudnativek8s/job-lease-keeper:0.10.2
+         image: cloudnativek8s/job-lease-keeper:v1.2.1
          command:
          - "/job-lease-keeper"
          imagePullPolicy: IfNotPresent
