@@ -21,7 +21,7 @@ func CleanupPod(namespace string, successThreshold int, failureThreshold int) mo
 	})
 	var output model.CleanupResult
 	if jErr != nil {
-		cfg.LoggerForTask("cleanup-pod").WithField("phase", "list-pods").Error("error", jErr)
+		cfg.LoggerForTask("cleanup-pod").WithField("namespace", namespace).WithField("phase", "list-pods").Error("error", jErr)
 		output = model.CleanupResult{
 			Status: "error",
 		}
@@ -48,13 +48,24 @@ func CleanupPod(namespace string, successThreshold int, failureThreshold int) mo
 
 			var completionTime *v1.Time
 			for _, cs := range item.Status.ContainerStatuses {
-				completionTime = &cs.State.Terminated.FinishedAt
+				if cs.State.Terminated != nil {
+					completionTime = &cs.State.Terminated.FinishedAt
+				}
 			}
+
 			if completionTime == nil {
-				completionTime = item.Status.StartTime
+				for _, is := range item.Status.InitContainerStatuses {
+					if is.State.Terminated != nil {
+						completionTime = &is.State.Terminated.FinishedAt
+					}
+				}
+				if completionTime == nil {
+					completionTime = item.Status.StartTime
+				}
 			}
 			duration := now.Sub(completionTime.Time).Minutes()
 			fields := map[string]interface{}{
+				"namespace": namespace,
 				"name":      item.Name,
 				"completed": fmt.Sprintf("%.0f minutes ago", duration),
 			}
